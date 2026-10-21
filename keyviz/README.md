@@ -42,7 +42,12 @@ sudo python3 keyviz.py --mouse  # 键盘 + 鼠标指示
 > 读取 `/dev/input/event*` 需要 root 权限，或把用户加入 `input` 组后免 sudo：
 > `sudo usermod -aG input $USER`（注销重登生效）。
 
-结束：终端 `Ctrl+C`，或 `pkill -f keyviz.py`。
+## 退出
+
+- 在启动它的终端按 `Ctrl+C`（前台运行，浮窗立即消失）
+- 原终端已关闭时，另开终端执行 `sudo pkill -f keyviz.py`
+  （工具以 root 运行，pkill 不加 sudo 会报 `Operation not permitted`）
+- 确认已退出：`pgrep -f keyviz.py`，无任何输出即已结束
 
 ## 可调参数
 

@@ -1,7 +1,7 @@
 keyviz 按键可视化工具使用说明
 ==============================
 
-位置：/opt/myplugins/tools/keyviz/keyviz.py
+位置：/opt/myplugins/keyviz/keyviz.py
 用途：KDE Plasma Wayland 下实时显示键盘按键与鼠标操作的浮窗工具，
      适合录屏教学、快捷键演示。按下即显示、全部松开后保持 2.5 秒再淡出。
 
@@ -16,22 +16,20 @@ Wayland 下的特点：本工具直读内核输入设备（evdev），不依赖 
 （screenkey 等传统工具在 Wayland 下抓不到，只能录到 XWayland 应用）。
 
 ----------------------------------------
-二、怎么用
+二、怎么用（启动）
 ----------------------------------------
-启动（二选一）：
+启动（两种写法等价）：
 
     sudo python3 ~/.local/bin/keyviz.py
 
-    sudo python3 /opt/myplugins/tools/keyviz/keyviz.py
+    sudo python3 /opt/myplugins/keyviz/keyviz.py
 
 带鼠标指示启动（推荐教学时用）：
 
     sudo python3 ~/.local/bin/keyviz.py --mouse
 
-说明：
-- ~/.local/bin/keyviz.py 是指向 /opt/myplugins/tools/keyviz/keyviz.py
-  的软链接，两种写法等价。
-- 结束工具：Ctrl+C（终端前台运行）；或另开终端 pkill -f keyviz.py
+说明：~/.local/bin/keyviz.py 是指向 /opt/myplugins/keyviz/keyviz.py
+的软链接。
 
 免 sudo 启动（可选，一次性配置）：
 
@@ -41,7 +39,26 @@ Wayland 下的特点：本工具直读内核输入设备（evdev），不依赖 
     不再需要 sudo。
 
 ----------------------------------------
-三、显示效果
+三、怎么退出
+----------------------------------------
+方法 1（常用）：回到启动它的那个终端，按 Ctrl+C，浮窗立即消失、
+程序结束。
+
+方法 2（原终端已关闭或找不到）：另开一个终端执行：
+
+    sudo pkill -f keyviz.py
+
+注意：工具通常用 sudo 启动，进程属于 root，pkill 前面必须加 sudo，
+否则会报 "Operation not permitted"。
+
+确认退出成功：
+
+    pgrep -f keyviz.py
+
+没有任何输出 = 已完全退出；打印出一行进程信息 = 还在运行。
+
+----------------------------------------
+四、显示效果
 ----------------------------------------
 - 位置：屏幕底部居中，距底边 56px
 - 键帽样式：深色衬底容器 + 三种键帽
@@ -55,7 +72,7 @@ Wayland 下的特点：本工具直读内核输入设备（evdev），不依赖 
   · 全部松开后整条组合冻结保持 2.5 秒，然后 0.3 秒渐隐消失
 
 ----------------------------------------
-四、依赖
+五、依赖
 ----------------------------------------
 Arch Linux 安装：
 
@@ -64,11 +81,14 @@ Arch Linux 安装：
 （其余 Linux 发行版对应 evdev、PyQt5 两个 Python 包即可。）
 
 ----------------------------------------
-五、常见问题
+六、常见问题
 ----------------------------------------
 Q: 提示"未找到键盘设备"？
 A: 读取 /dev/input 需要权限，加 sudo 运行；或按上面方法把用户
    加入 input 组。
+
+Q: pkill 提示 "Operation not permitted"？
+A: 忘了加 sudo，正确写法：sudo pkill -f keyviz.py。
 
 Q: 浮窗挡住了演示内容？
 A: 调整脚本头部可调参数：BOTTOM_MARGIN（距底边距离）、HOLD_MS
@@ -82,6 +102,5 @@ A: screenkey 基于 X11 的 XRecord，在 Wayland 会话下只能捕获
 Q: 想改键帽配色？
 A: 脚本头部 CAP_STYLE 字典集中定义了三种键帽样式，改
    background/color 即可。
-
 
 AI生成
